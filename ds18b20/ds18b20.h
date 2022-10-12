@@ -5,8 +5,11 @@
 #include <stdlib.h>
 #include "onewire.h"
 
-void ds18b20Init(GPIO_Id gpioId);
-void broadcastConvert();
-float getTemperature();
+int ds18b20Init(GPIO_Id gpioId);
+void ds18b20Convert(int fd);
+float ds18b20GetTemperature(int fd);
+float ds18b20GetTemperatureAddress(int fd, unsigned char* address);
+void ds18b20PrintSingleAddress(int fd);
+void ds18b20Close(int fd);
 
 #endif

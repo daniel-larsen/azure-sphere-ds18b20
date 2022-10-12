@@ -6,18 +6,17 @@
 #include <errno.h>
 #include <unistd.h>
 
-int fd = -1;
-
-void onewireStart(GPIO_Id gpioId) {
-    fd = GPIO_OpenAsOutput(gpioId, GPIO_OutputMode_OpenDrain, GPIO_Value_High);
+int onewireStart(GPIO_Id gpioId) {
+    int fd = GPIO_OpenAsOutput(gpioId, GPIO_OutputMode_OpenDrain, GPIO_Value_High);
     if (fd < 0) {
         Log_Debug(
             "Error opening GPIO: %s (%d). Check that app_manifest.json includes the GPIO used.\n",
             strerror(errno), errno);
     }
+    return fd;
 }
 
-void onewirePin(bool level) {
+void onewirePin(int fd, bool level) {
     if (level) {
         GPIO_SetValue(fd, GPIO_Value_High);
     }
@@ -26,7 +25,7 @@ void onewirePin(bool level) {
     }
 }
 
-bool onewireRead() {
+bool onewireRead(int fd) {
     GPIO_Value_Type result;
     GPIO_GetValue(fd, &result);
     if (result == GPIO_Value_High) {
@@ -49,46 +48,46 @@ void delay_us(long usec) {
     } while (remaining.tv_nsec > 0);
 }
 
-void onewireWriteBit(int b) {
+void onewireWriteBit(int fd, int b) {
     b = b & 0x01;
     if (b) {
         // Write '1' bit
-        onewirePin(false);
-        onewirePin(true);
+        onewirePin(fd, false);
+        onewirePin(fd, true);
         delay_us(60);
     }
     else {
         // Write '0' bit
-        onewirePin(false);
+        onewirePin(fd, false);
         delay_us(60);
-        onewirePin(true);
+        onewirePin(fd, true);
     }
 }
 
-unsigned char onewireReadBit() {
+unsigned char onewireReadBit(int fd) {
     unsigned char result;
 
-    onewirePin(false);
-    onewirePin(true);
-    result = onewireRead();
+    onewirePin(fd, false);
+    onewirePin(fd,true);
+    result = onewireRead(fd);
     delay_us(55);
     return result;
 
 }
 
-unsigned char onewireInit() {
-    onewirePin(false);
+unsigned char onewireInit(int fd) {
+    onewirePin(fd, false);
     delay_us(480);
-    onewirePin(true);
+    onewirePin(fd, true);
     delay_us(60);
-    if (onewireRead() == 0) {
+    if (onewireRead(fd) == 0) {
         delay_us(100);
         return 1;
     }
     return 0;
 }
 
-unsigned char onewireReadByte() {
+unsigned char onewireReadByte(int fd) {
     unsigned char result = 0;
 
     for (unsigned char loop = 0; loop < 8; loop++) {
@@ -96,16 +95,16 @@ unsigned char onewireReadByte() {
         result >>= 1;
 
         // if result is one, then set MS bit
-        if (onewireReadBit())
+        if (onewireReadBit(fd))
             result |= 0x80;
     }
     return result;
 }
 
-void onewireWriteByte(char data) {
+void onewireWriteByte(int fd, char data) {
     // Loop to write each bit in the byte, LS-bit first
     for (unsigned char loop = 0; loop < 8; loop++) {
-        onewireWriteBit(data & 0x01);
+        onewireWriteBit(fd, data & 0x01);
 
         // shift the data byte for the next bit
         data >>= 1;

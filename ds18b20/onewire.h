@@ -3,11 +3,12 @@
 
 #include <applibs/gpio.h>
 
-void onewireStart(GPIO_Id gpioId);
-unsigned char onewireInit();
-unsigned char onewireReadBit();
-unsigned char onewireReadByte();
-void onewireWriteByte(char data);
+int onewireStart(GPIO_Id gpioId);
+unsigned char onewireInit(int fd);
+unsigned char onewireReadBit(int fd);
+unsigned char onewireReadByte(int fd);
+void onewireWriteByte(int fd, char data);
 unsigned char onewireCRC(unsigned char* addr, unsigned char len);
+void onewireClose(int fd);
 
 #endif
