@@ -7,8 +7,6 @@
 
 void ds18b20Init(GPIO_Id gpioId);
 void broadcastConvert();
-float getTemperature(unsigned char* address);
-int getTemperatureInt(unsigned char* address);
-void printSingleAddress();
+float getTemperature();
 
 #endif

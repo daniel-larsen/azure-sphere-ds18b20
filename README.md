@@ -10,5 +10,14 @@ This repository contains the code required to connect a [DS18B20](https://www.ma
 ```c
 #include "ds18b20/ds18b20.h"
 
+ds18b20Init(0); // initinitialize ds18b20 and one wire bus
+
+broadcastConvert(); // instruct ds18b20 to convert temperature
+
+nanosleep(&sleepTime, NULL); // wait at least 750 ms
+
+// get and print temperature 
+float temp = getTemperature();
+Log_Debug("%.1f C\n", temp);
 
 ```
