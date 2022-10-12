@@ -26,3 +26,6 @@ int main(void)
 }
 
 ```
+
+### Credit
+This project was adapted from libraries found at https://github.com/simonbarker/pic-libraries.
