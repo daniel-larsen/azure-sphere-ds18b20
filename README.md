@@ -4,10 +4,11 @@ This repository contains the code required to connect a [DS18B20](https://www.ma
 
 ## Installation
 
-Copy the ds18b20 folder into your Azure Sphere project. 
+1. Copy the ds18b20 folder into your Azure Sphere project. 
+2. Add add_subdirectory(ds18b20) to your CMakeLists.txt file. 
 
 ```c
-#include "ds18b20.h"
+#include "ds18b20/ds18b20.h"
 
 
 ```

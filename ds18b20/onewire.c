@@ -1,6 +1,5 @@
 #include "onewire.h"
 #include <stdbool.h>
-#include <mt3620_rdb.h>
 #include <time.h>
 #include <applibs/log.h>
 #include <string.h>

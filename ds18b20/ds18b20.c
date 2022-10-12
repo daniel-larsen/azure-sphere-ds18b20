@@ -1,5 +1,5 @@
-#include "DS18B20.h"
 #include "onewire.h"
+#include "ds18b20.h"
 #include <applibs/log.h>
 
 /*

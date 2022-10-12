@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "onewire.h"
-#include "DS18B20.h"
 
 void ds18b20Init(GPIO_Id gpioId);
 void broadcastConvert();

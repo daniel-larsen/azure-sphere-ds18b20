@@ -1,0 +1,12 @@
+{
+  "SchemaVersion": 1,
+  "Name": "AzureSphereDS18B20Sample",
+  "ComponentId": "00da9856-2ee9-48df-90fc-a3c9569186a5",
+  "EntryPoint": "/bin/app",
+  "CmdArgs": [],
+  "Capabilities": {
+    "Gpio": [ 0 ],
+    "AllowedApplicationConnections": []
+  },
+  "ApplicationType": "Default"
+}
