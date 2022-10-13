@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include "onewire.h"
 
+#define INVALID_TEMPERATURE -404
+
 int ds18b20Init(GPIO_Id gpioId);
 void ds18b20Convert(int fd);
 float ds18b20GetTemperature(int fd);

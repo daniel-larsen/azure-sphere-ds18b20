@@ -10,11 +10,6 @@ void ds18b20Convert(int fd) {
   onewireInit(fd);
   onewireWriteByte(fd, 0xCC);
   onewireWriteByte(fd, 0x44);
-
-  while (1) {
-    if (onewireReadBit(fd))
-      break;
-  }
 }
 
 /*
@@ -27,9 +22,13 @@ float ds18b20GetTemperature(int fd) {
   onewireWriteByte(fd, 0xCC);
   onewireWriteByte(fd, 0xBE);
 
-  for (uint8_t i = 0; i < 2; i++) {
+  for (uint8_t i = 0; i < 9; i++) {
     scratchPad[i] = onewireReadByte(fd);
   }
+
+  unsigned char crc = onewireCRC(scratchPad, 8);
+  if (scratchPad[8] != crc)
+      return -404;
 
   float temperature = ((scratchPad[1] * 256) + scratchPad[0])*0.0625;
 
@@ -43,14 +42,18 @@ float ds18b20GetTemperatureAddress(int fd, unsigned char* address) {
 
     onewireInit(fd);
     onewireWriteByte(fd, 0x55);
-    unsigned char i;
-    for (i = 0; i < 8; i++)
+    for (uint8_t i = 0; i < 8; i++)
         onewireWriteByte(fd, address[i]);
     onewireWriteByte(fd, 0xBE);
 
-    for (i = 0; i < 2; i++) {
+    for (uint8_t i = 0; i < 9; i++) {
         scratchPad[i] = onewireReadByte(fd);
     }
+
+    unsigned char crc = onewireCRC(scratchPad, 8);
+    if (scratchPad[8] != crc)
+        return -404;
+
     temperature = ((scratchPad[1] * 256) + scratchPad[0]) * 0.0625;
 
     return temperature;
@@ -64,10 +67,11 @@ void ds18b20PrintSingleAddress(int fd) {
   //attach one sensor to port 25 and this will print out it's address
   unsigned char address[8]= {0,0,0,0,0,0,0,0};
   onewireWriteByte(fd, 0x33);
-  unsigned char i;
-  for (i = 0; i<8; i++)
+
+  for (uint8_t i = 0; i<8; i++)
     address[i] = onewireReadByte(fd);
-  for (i = 0; i<8; i++)
+
+  for (uint8_t i = 0; i<8; i++)
     Log_Debug("0x%x,",address[i]);
   
   //check crc

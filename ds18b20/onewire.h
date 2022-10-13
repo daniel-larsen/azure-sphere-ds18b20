@@ -5,7 +5,6 @@
 
 int onewireStart(GPIO_Id gpioId);
 unsigned char onewireInit(int fd);
-unsigned char onewireReadBit(int fd);
 unsigned char onewireReadByte(int fd);
 void onewireWriteByte(int fd, char data);
 unsigned char onewireCRC(unsigned char* addr, unsigned char len);

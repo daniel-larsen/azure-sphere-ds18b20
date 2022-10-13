@@ -18,7 +18,9 @@ int main(void)
 
         // get and print temperature 
         float temp = ds18b20GetTemperature(sensor);
-        Log_Debug("%.1f C\n", temp);
+        if (temp != INVALID_TEMPERATURE) {
+            Log_Debug("%.1f C\n", temp);
+        }
 
         nanosleep(&sleepTime, NULL);
     }

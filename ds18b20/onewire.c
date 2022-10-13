@@ -54,12 +54,12 @@ void onewireWriteBit(int fd, int b) {
         // Write '1' bit
         onewirePin(fd, false);
         onewirePin(fd, true);
-        delay_us(60);
+        delay_us(10);
     }
     else {
         // Write '0' bit
         onewirePin(fd, false);
-        delay_us(60);
+        delay_us(10);
         onewirePin(fd, true);
     }
 }
@@ -70,7 +70,7 @@ unsigned char onewireReadBit(int fd) {
     onewirePin(fd, false);
     onewirePin(fd,true);
     result = onewireRead(fd);
-    delay_us(55);
+    delay_us(10);
     return result;
 
 }
@@ -79,9 +79,9 @@ unsigned char onewireInit(int fd) {
     onewirePin(fd, false);
     delay_us(480);
     onewirePin(fd, true);
-    delay_us(60);
+    delay_us(30);
     if (onewireRead(fd) == 0) {
-        delay_us(100);
+        delay_us(60);
         return 1;
     }
     return 0;
@@ -126,4 +126,8 @@ unsigned char onewireCRC(unsigned char* addr, unsigned char len) {
     }
 
     return crc;
+}
+
+void onewireClose(int fd) {
+    close(fd);
 }
